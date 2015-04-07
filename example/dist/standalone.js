@@ -2,7 +2,11 @@
 (function (global){
 var React = (typeof window !== "undefined" ? window.React : typeof global !== "undefined" ? global.React : null),
   AutosuggestItem = require('./AutosuggestItem.jsx'),
-  superagent = require("superagent");
+  superagent = require('superagent'),
+  superagentJSONP = require('superagent-jsonp');
+
+superagentJSONP(superagent);
+  
 
 var Autosuggest = React.createClass({displayName: "Autosuggest",
   /**
@@ -14,8 +18,9 @@ var Autosuggest = React.createClass({displayName: "Autosuggest",
       fixtures: [],
       placeholder: 'Search',
       onSuggestSelect: function() {},
-      location: null,
-      radius: 0
+      jsonp: 'false',
+      url:'',
+      minChars: 3
     };
   },
 
@@ -29,8 +34,6 @@ var Autosuggest = React.createClass({displayName: "Autosuggest",
       userInput: '',
       activeSuggest: null,
       suggests: [],
-      autocoder: new google.maps.Geocoder(),
-      autocompleteService: new google.maps.places.AutocompleteService()
     };
   },
 
@@ -39,33 +42,42 @@ var Autosuggest = React.createClass({displayName: "Autosuggest",
    */
   onInputChange: function() {
     var userInput = this.refs.autosuggestInput.getDOMNode().value;
-
+    this.props.queryString = userInput;
     this.setState({userInput: userInput}, function() {
       if (!userInput) {
         this.updateSuggests();
       }
     }.bind(this));
 
-    if (!userInput) {
+    if (!userInput || userInput.length < this.props.minChars) {
       return;
     }
 
-    this.state.autocompleteService.getPlacePredictions({
-      input: userInput,
-      location: this.props.location || new google.maps.LatLng(0, 0),
-      radius: this.props.radius
-    }, function(suggestsGoogle) {
-      this.updateSuggests(suggestsGoogle);
-    }.bind(this));
+    if(this.props.jsonp === 'true'){
+      var self = this;
+      superagent.get(this.props.url)
+        .query({'q':userInput })
+        .jsonp()
+        .end(function(response){
+          self.updateSuggests(response);
+        })
+    }else{
+       superagent.get(this.props.url)
+        .query({'q': userInput })
+        .send()
+        .end(function(response){
+          self.updateSuggests(response);
+        })
+    }
   },
 
   /**
    * Update the suggests
-   * @param  {Object} suggestsGoogle The new google suggests
+   * @param  {Object}  suggestsData The new suggested data
    */
-  updateSuggests: function(suggestsGoogle) {
-    if (!suggestsGoogle) {
-      suggestsGoogle = [];
+  updateSuggests: function(suggestsData) {
+    if (!suggestsData) {
+      suggestsData = [];
     }
 
     var suggests = [],
@@ -79,10 +91,10 @@ var Autosuggest = React.createClass({displayName: "Autosuggest",
       }
     }.bind(this));
 
-    suggestsGoogle.forEach(function(suggest) {
+    suggestsData.forEach(function(suggest) {
       suggests.push({
-        label: suggest.description,
-        placeId: suggest.place_id
+        label: suggest,
+        placeId: suggest
       });
     }.bind(this));
 
@@ -178,40 +190,8 @@ var Autosuggest = React.createClass({displayName: "Autosuggest",
       isSuggestsHidden: true,
       userInput: suggest.label
     });
-
-    if (suggest.location) {
-      this.props.onSuggestSelect(suggest);
-      return;
-    }
-
-    this.autocodeSuggest(suggest);
   },
 
-  /**
-   * autocode a suggest
-   * @param  {Object} suggest The suggest
-   */
-  autocodeSuggest: function(suggest) {
-    var location;
-
-    this.state.autocoder.autocode(
-      {address: suggest.label},
-      function(results, status) {
-        if (status !== google.maps.GeocoderStatus.OK) {
-          return;
-        }
-
-        location = results[0].geometry.location;
-
-        suggest.location = {
-          lat: location.lat(),
-          lng: location.lng()
-        };
-
-        this.props.onSuggestSelect(suggest);
-      }.bind(this)
-    );
-  },
 
   /**
    * Render the view
@@ -273,7 +253,7 @@ module.exports = Autosuggest;
 
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./AutosuggestItem.jsx":2,"superagent":undefined}],2:[function(require,module,exports){
+},{"./AutosuggestItem.jsx":2,"superagent":undefined,"superagent-jsonp":undefined}],2:[function(require,module,exports){
 (function (global){
 var React = (typeof window !== "undefined" ? window.React : typeof global !== "undefined" ? global.React : null);
 
