@@ -1,5 +1,5 @@
 {
-  "name": "react-autosuggest",
+  "name": "react-suggest",
   "version": "0.0.1",
   "description": "Pure react-based autosuggest with ajax suggestion list population",
   "main": "src/Autosuggest.jsx",
@@ -41,7 +41,7 @@
   "keywords": [
     "react",
     "autosuggest",
-    "react-autosuggest",
+    "react-suggest",
     "react-component"
   ],
   "author": "Haribabu <h18n.js@gmail.com> (http://h18n.com/)",
