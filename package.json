@@ -1,5 +1,5 @@
 {
-  "name": "Haribabu",
+  "name": "react-autosuggest",
   "version": "0.0.1",
   "description": "Pure react-based autosuggest with ajax suggestion list population",
   "main": "src/Autosuggest.jsx",
