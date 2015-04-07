@@ -1,0 +1,47 @@
+{
+  "name": "Haribabu",
+  "version": "0.0.1",
+  "description": "Pure react-based autosuggest with ajax suggestion list population",
+  "main": "src/Autosuggest.jsx",
+  "scripts": {
+    "test": "npm run build-test && gulp test"
+  },
+  "homepage": "https://github.com/harrybabu/react-autosuggest",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/harrybabu/react-autosuggest.git"
+  },
+  "bugs": {
+    "url": "https://github.com/harrybabu/react-autosuggest/issues"
+  },
+  "dependencies": {
+    "react": "^0.13.1",
+    "reactify": "^1.1.0",
+    "superagent": "^0.21.0"
+  },
+  "devDependencies": {
+    "gulp": "^3.8.10",
+    "gulp-git": "^1.0.0",
+    "react-component-gulp-tasks": "^0.1.1"
+  },
+  "browser": "src/Autosuggest.jsx",
+  "browserify": {
+    "transform": [
+      "reactify"
+    ]
+  },
+  "browserify-shim": {
+    "react": "global:React"
+  },
+  "scripts": {
+    "test": "echo \"no tests yet\" && exit 0"
+  },
+  "keywords": [
+    "react",
+    "autosuggest",
+    "react-autosuggest",
+    "react-component"
+  ],
+  "author": "Haribabu <h18n.js@gmail.com> (http://h18n.com/)",
+  "license": "MIT"
+}
