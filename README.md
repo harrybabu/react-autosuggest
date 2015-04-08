@@ -1,5 +1,3 @@
-# react-autosuggest
-
 # React Autosuggest
 
 A [React](http://facebook.github.io/react/) autosuggest with ajax suggestion list population. You can also define your own suggests as defaults.
