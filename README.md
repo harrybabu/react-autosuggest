@@ -7,7 +7,7 @@ A [React](http://facebook.github.io/react/) autosuggest with ajax suggestion lis
 
 ## Demo
 
-Live demo: (http://cdn.rawgit.com/harrybabu/react-autosuggest/master/example/dist/index.html)
+[Live demo](http://cdn.rawgit.com/harrybabu/react-autosuggest/master/example/dist/index.html)
 
 
 ### Development
